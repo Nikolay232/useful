@@ -1,0 +1,91 @@
+http://postgresql.ru.net/node/43                                                                        -- смена пароля
+http://stackoverflow.com/questions/7695962/postgresql-password-authentication-failed-for-user-postgres  -- смена пароля
+-------------------------------------------------------------------------------------------------------
+http://www.whiteboardcoder.com/2012/04/install-postgres-91-on-ubuntu-1004-lts.html  --  postgres 9.1
+
+
+alter user postgres with password 'postgres';  -- смена пароля для входа в pgadmin
+
+
+DROP SCHEMA "schema" CASCADE;
+ALTER TABLE table DROP CONSTRAINT constrain;
+
+pg_dump --host localhost --port 5432 --username postgres --format plain --verbose --schema 'schema' "database"
+РАЗМЕР ТАБЛИЦЫ:
+SELECT
+'bd_test_test'||'.'||tablename AS full_tname,
+pg_size_pretty(pg_total_relation_size('bd_test_test'||'.'||tablename)) AS total_usage,
+pg_size_pretty((pg_total_relation_size('bd_test_test'||'.'||tablename) - pg_relation_size('bd_test_test'||'.'||tablename))) AS external_table_usage
+FROM pg_catalog.pg_tables
+ORDER BY pg_total_relation_size('bd_test_test'||'.'||tablename) DESC;
+или
+SELECT relname AS name, relfilenode AS oid, (relpages * 8192 / (1024*1024))::int as size_mb, reltuples as count FROM pg_class WHERE relname NOT LIKE 'pg%' ORDER BY relpages DESC;
+
+как залить бинарный дамп???
+создаём БД, схему и выполняем команду 
+/usr/bin/pg_restore --host localhost --port 5432 --username postgres --dbname "bd" --schema schema --data-only  --verbose "/home/user/dump.1.dump"
+/usr/bin/pg_restore --host localhost --port 5432 --username "postgres" --dbname "bd" --no-password  --schema schema --verbose "/home/user/dump.1.dump"
+
+hh-hrbrand=# create schema schema_name;
+CREATE SCHEMA
+hh-hrbrand=# GRANT ALL on SCHEMA schema_name to user;
+GRANT
+hh-hrbrand=# set search_path ='schema_name';
+SET
+hh-hrbrand=# alter user user set search_path = 'schema_name';
+ALTER ROLE
+hh-hrbrand=# 
+
+
+
+ALTER TABLE the_table ALTER COLUMN col_name TYPE integer USING (col_name::integer);    --- преобразование к типу
+
+
+
+
+ostgres@niko-desktop:/home/ pg_dump -a --column-inserts -t 'schema.table' -U postgres -f ./moscow.sql 
+pg_dump: No matching tables were found
+postgres@niko-desktop:/home/ pg_dump -a --column-inserts -t "schema.table" -U postgres -f ./moscow.sql 
+pg_dump: No matching tables were found
+postgres@niko-desktop:/home/ pg_dump -a --column-inserts -t "schema.table" -U postgres -f ./moscow.sql hh-expo
+pg_dump: [archiver] could not open output file "./moscow.sql": Отказано в доступе
+
+
+
+==========================================Изменение таблиц===================================================================
+Добавление колонки - ALTER TABLE products ADD COLUMN description text;    ALTER TABLE products ADD COLUMN description text CHECK (description <> '');
+
+Удаление колонки - ALTER TABLE products DROP COLUMN description;
+
+Добавление ограничения -
+        ALTER TABLE products ADD CHECK (name <> '');
+        ALTER TABLE products ADD CONSTRAINT some_name UNIQUE (product_no);
+        ALTER TABLE products ADD FOREIGN KEY (product_group_id) REFERENCES product_groups;
+
+        Чтобы добавить ограничение не-null, которое нельзя записать как ограничение на таблицу, используйте синтаксис:
+        ALTER TABLE products ALTER COLUMN product_no SET NOT NULL;
+
+Удаление ограничения -
+        ALTER TABLE products DROP CONSTRAINT some_name;
+        (Если вы выполняете команду с указанием такого имени ограничения как $2, не забудьте, что вам понадобится заключить имя в двойные кавычки, чтобы имя было воспринято как правильный идентификатор.)
+        
+        Как и в случае с удалением колонки, вам понадобится добавить CASCADE, если вы хотите удалить ограничение, от которого зависит что либо другое. Например, если некое ограничение внешнего ключа зависит от ограничения уникальности или первичного ключа для ссылочной колонки(ок).
+        
+        Те же правила работают для всех видов ограничений, исключая ограничения не-null. Чтобы удалить ограничение не-null, используйте
+        
+        ALTER TABLE products ALTER COLUMN product_no DROP NOT NULL;
+
+Изменение значения по умолчанию для колонки -
+        ALTER TABLE products ALTER COLUMN price SET DEFAULT 7.77;
+        Заметим, что выполнение данной команды не влияет на уже существующие строки в таблице, команда изменят значение по умолчанию только для будущих команд INSERT.
+        
+        Чтобы удалить любое значение по умолчанию, используйте
+        
+        ALTER TABLE products ALTER COLUMN price DROP DEFAULT;
+
+Изменение типа данных колонки - ALTER TABLE products ALTER COLUMN price TYPE numeric(10,2);
+
+Переименование колонки - ALTER TABLE products RENAME COLUMN product_no TO product_number;
+
+Переименование таблицы - ALTER TABLE products RENAME TO items;
+=============================================================================================================================

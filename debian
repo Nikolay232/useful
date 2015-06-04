@@ -1,0 +1,4 @@
+пакет stdeb
+https://pypi.python.org/pypi/stdeb#debianize-distutils-command
+
+pdebuild --buildresult ./debs -- билдит проект в дирректорию debs
