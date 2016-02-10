@@ -1,0 +1,3 @@
+-------------------------НЕ УДАЛЯТЬ КАСКАДНО ССЫЛАЮЩИЙСЯ ОБЪЕКТ----------------
+
+model = models.ForeignKey(MyModel, null = True, on_delete = models.SET_NULL)
