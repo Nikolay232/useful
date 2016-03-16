@@ -1,0 +1,13 @@
+----------------------------------------SOAP API-------------------------------
+http://stackoverflow.com/questions/20903250/how-to-extract-method-using-suds-in-python
+библиотека suds
+
+from suds.client import Client
+url_service = 'http://host?wsdl'
+
+ - авторизация
+client = Client(url_service, username='login', password='pasword')
+ - список доступных методов
+list_of_methods = [method for method in client.wsdl.services[0].ports[0].methods]
+ - вызвать метод
+client.service.Method(xml)
