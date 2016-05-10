@@ -26,15 +26,15 @@ SELECT relname AS name, relfilenode AS oid, (relpages * 8192 / (1024*1024))::int
 /usr/bin/pg_restore --host localhost --port 5432 --username postgres --dbname "bd" --schema schema --data-only  --verbose "/home/user/dump.1.dump"
 /usr/bin/pg_restore --host localhost --port 5432 --username "postgres" --dbname "bd" --no-password  --schema schema --verbose "/home/user/dump.1.dump"
 
-hh-hrbrand=# create schema schema_name;
+# create schema schema_name;
 CREATE SCHEMA
-hh-hrbrand=# GRANT ALL on SCHEMA schema_name to user;
+# GRANT ALL on SCHEMA schema_name to user;
 GRANT
-hh-hrbrand=# set search_path ='schema_name';
+# set search_path ='schema_name';
 SET
-hh-hrbrand=# alter user user set search_path = 'schema_name';
+# alter user user set search_path = 'schema_name';
 ALTER ROLE
-hh-hrbrand=# 
+# 
 
 
 
@@ -89,3 +89,6 @@ pg_dump: [archiver] could not open output file "./moscow.sql": Отказано 
 
 Переименование таблицы - ALTER TABLE products RENAME TO items;
 =============================================================================================================================
+ALTER TABLE "table_name" ALTER COLUMN "field" DROP NOT NULL;
+
+"table_name"."field" > current_date - integer '3'
