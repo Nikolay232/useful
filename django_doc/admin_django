@@ -1,3 +1,8 @@
+Reversing admin URLs
+
+https://docs.djangoproject.com/en/1.9/ref/contrib/admin/#reversing-admin-urls
+
+
 Скрыть отображение модели в админке
 
 class MyModelAdmin(admin.ModelAdmin):
